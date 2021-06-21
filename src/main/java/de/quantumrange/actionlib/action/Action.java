@@ -16,57 +16,73 @@ public interface Action<T> {
     }
 
     /**
-     * Führt die Action nach der angegebenden Zeit aus.
+     * Execute the Action after the time.
      *
-     * @param after ist die Zeit die es dauern soll bis es queue wird.
-     * @param unit ist die TimeUnit in der after gerechnet wird.
+     * @param after is the time count.
+     * @param unit is the time unit.
      */
     default void queue(long after, TimeUnit unit) {
         deadline(after, unit).queue();
     }
 
     /**
-     * Führt die Action aus und gibt sie per Consumer zurück.
+     * Execute the Action in the background.
      *
-     * @param completion wird ausgeführt sobald im hintergrund alles berechnet wurde.
+     * @param completion is executed as soon as the value has been calculated.
      */
     default void queue(Consumer<T> completion) {
         queue(completion, null);
     }
 
     /**
-     * Führt die Action aus und gibt sie per Consumer zurück.
-     * Bei Fehlern wird failure ausgefüht.
+     * Execute Action in the background with custom rules depending on the implementation.
      *
-     * @param completion wird ausgeführt sobald im hintergrund alles berechnet wurde.
-     * @param failure wird ausgeführt falls es beim Ausführen zum fehler gekommen ist.
+     * @param completion is executed as soon as the value has been calculated.
+     * @param failure is executed as soon as the value throw a error.
      */
     void queue(Consumer<T> completion, Consumer<Throwable> failure);
 
     /**
-     * Führt die Action aus und hält den Computer an bis die Action fertig ausgeführt wurde.
+     * Executes the action and stops the program until the action is finished.
      *
-     * @return den Berechneten wert.
+     * @return the calculated value
      */
     T completion();
 
     /**
-     * Fragt kurz bevorm ausführen noch den BooleanSUpplier check ab und falls der false ist wird die Action nicht
-     * weiter ausgeführt. Dies ist Praktisch falls man kurz bevor es ausgeführt wurde nochmal abfragen will ob man
-     * gerade z.B: eine internet connection hat.
+     * just before execution it checks the BooleanSupplier check and if the result is false the action will not be
+     * will not be executed. This is useful if you want to check if you have an internet connection just before
+     * executing the action.
      *
-     * @param check
-     * @return
+     * @param check boolCheck
+     * @return itself
      */
     Action<T> setCheck(BooleanSupplier check);
 
     /**
+     * Set the Deadline for the Action
      *
-     * @param deadline
-     * @return
+     * @param deadline is the time from which the action can be executed.
+     * @return itself
      */
     Action<T> deadline(LocalDateTime deadline);
+
+    /**
+     * Map the Result Value to a Different Type.
+     *
+     * @param map the Function that map T to O
+     * @param <O> the new Type
+     * @return itself with other return value
+     */
     <O> Action<O> map(Function<O, T> map);
+
+    /**
+     * Set a deadline with the current time and additional time.
+     *
+     * @param delay the time count.
+     * @param unit the time unit.
+     * @return itself
+     */
     default Action<T> deadline(long delay, TimeUnit unit) {
         return deadline(LocalDateTime.now().plusNanos(unit.toNanos(delay)));
     }
