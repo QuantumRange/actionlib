@@ -68,12 +68,8 @@ public class GETRequest<T> implements WebRequest<T, HashMap<String, String>> {
         HttpRequest request = requestBuilder.build();
 
         return actionBuilder.apply(error -> {
-            try {
-                return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
-            } catch (IOException | InterruptedException e) {
-                error.accept(e);
-                return null;
-            }
+            // return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+            return null;
         });
     }
 
