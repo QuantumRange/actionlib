@@ -27,11 +27,8 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file  
       - name: Package
         run: mvn package
-      - name: Create JavaDoc
-        run: mvn javadoc:javadoc
-      - name: javadoc-cleanup
-        uses: cicirello/javadoc-cleanup@v1.3.0
-        with:
-          path-to-root: .
-          base-url-path: .
-          user-defined-block: .
+
+      - name: GitHub Create Tag Release
+        # You may pin to the exact commit or the version.
+        # uses: Roang-zero1/github-create-release-action@5cf058ddffa6fa04e5cda07c98570c757dc4a0e1
+        uses: Roang-zero1/github-create-release-action@v2.1.0
