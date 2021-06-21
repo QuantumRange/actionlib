@@ -1,8 +1,8 @@
-package de.quantumrange.action.web.impl;
+package de.quantumrange.actionlib.web.impl;
 
-import de.quantumrange.action.action.Action;
-import de.quantumrange.action.action.IndividualAction;
-import de.quantumrange.action.web.WebRequest;
+import de.quantumrange.actionlib.action.Action;
+import de.quantumrange.actionlib.action.IndividualAction;
+import de.quantumrange.actionlib.web.WebRequest;
 
 import java.io.IOException;
 import java.net.URI;

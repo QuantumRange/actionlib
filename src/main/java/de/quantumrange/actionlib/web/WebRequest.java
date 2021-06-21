@@ -1,6 +1,6 @@
-package de.quantumrange.action.web;
+package de.quantumrange.actionlib.web;
 
-import de.quantumrange.action.action.Action;
+import de.quantumrange.actionlib.action.Action;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

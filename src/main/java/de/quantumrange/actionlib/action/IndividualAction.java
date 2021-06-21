@@ -1,9 +1,8 @@
-package de.quantumrange.action.action;
+package de.quantumrange.actionlib.action;
 
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class IndividualAction<T> implements Action<T> {
 

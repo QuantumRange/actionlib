@@ -1,4 +1,4 @@
-package de.quantumrange.action.tests;
+package de.quantumrange.actionlib.tests;
 
 public class Main {
 

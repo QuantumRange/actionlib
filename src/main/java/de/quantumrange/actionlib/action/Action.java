@@ -1,4 +1,4 @@
-package de.quantumrange.action.action;
+package de.quantumrange.actionlib.action;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
