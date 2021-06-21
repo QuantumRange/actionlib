@@ -6,7 +6,11 @@
 
     <groupId>de.quantumrange</groupId>
     <artifactId>actionlib</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
+
+    <dependencies>
+
+    </dependencies>
 
     <distributionManagement>
         <repository>
