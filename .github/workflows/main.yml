@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Package
+        run: mvn package
+      - name: Create JavaDoc
+        run: mvn javadoc:javadoc
+      - name: Copy files to another repository
+        # You may pin to the exact commit or the version.
+        # uses: nkoppel/push-files-to-another-repository@0be7eeca3d4f544122c5cb268d41a79ababa8efa
+        uses: nkoppel/push-files-to-another-repository@v1.0.1
+        with:
+          source-files: target/site/
+          destination-github-username: QuantumRange
+          destination-repository-name: ActionLib
