@@ -29,11 +29,8 @@ jobs:
         run: mvn package
       - name: Create JavaDoc
         run: mvn javadoc:javadoc
-      - name: Copy files to another repository
-        # You may pin to the exact commit or the version.
-        # uses: nkoppel/push-files-to-another-repository@0be7eeca3d4f544122c5cb268d41a79ababa8efa
-        uses: nkoppel/push-files-to-another-repository@v1.0.1
+      - name: Copy file
+        uses: canastro/copy-action@0.0.2
         with:
-          source-files: target/site/
-          destination-github-username: QuantumRange
-          destination-repository-name: ActionLib
+          source: target/site/apidocs/
+          target: docs/
