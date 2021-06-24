@@ -1,6 +1,7 @@
 package de.quantumrange.actionlib.action;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
@@ -31,7 +32,7 @@ public interface Action<T> {
      *
      * @param completion is executed as soon as the value has been calculated.
      */
-    default void queue(Consumer<T> completion) {
+    default void queue(@Nullable Consumer<T> completion) {
         queue(completion, null);
     }
 
@@ -41,7 +42,7 @@ public interface Action<T> {
      * @param completion is executed as soon as the value has been calculated.
      * @param failure is executed as soon as the value throw a error.
      */
-    void queue(Consumer<T> completion, Consumer<Throwable> failure);
+    void queue(@Nullable Consumer<T> completion, @Nullable Consumer<Throwable> failure);
 
     /**
      * Executes the action and stops the program until the action is finished.
@@ -58,17 +59,26 @@ public interface Action<T> {
      * @param check boolCheck
      * @return itself
      */
-    Action<T> setCheck(BooleanSupplier check);
+    Action<T> setCheck(@Nonnull BooleanSupplier check);
 
-    default Action<T> addCheck(BooleanSupplier check) {
+    /**
+     * Adding another Check to the Action.
+     *
+     * @param check is a additional Check.
+     * @return itself
+     */
+    @Nonnull
+    default Action<T> addCheck(@Nonnull BooleanSupplier check) {
         BooleanSupplier supplier = getCheck();
-        setCheck((supplier == true || supplier.getAsBoolean()) && check.getAsBoolean());
+        return setCheck(() -> (supplier == null || supplier.getAsBoolean()) && check.getAsBoolean());
     }
 
     /**
+     * Return the Current Check, if no check is set return null
+     *
      * @return check - boolCheck
      */
-    @Nonnull
+    @Nullable
     BooleanSupplier getCheck();
 
     /**
@@ -77,16 +87,17 @@ public interface Action<T> {
      * @param deadline is the time from which the action can be executed.
      * @return itself
      */
-    Action<T> deadline(LocalDateTime deadline);
+    @Nonnull
+    Action<T> deadline(@Nonnull LocalDateTime deadline);
 
     /**
      * Map the Result Value to a Different Type.
      *
      * @param map the Function that map T to O
      * @param <O> the new Type
-     * @return itself with other return value
+     * @return itself
      */
-    <O> Action<O> map(Function<O, T> map);
+    <O> Action<O> map(@Nonnull Function<O, T> map);
 
     /**
      * Set a deadline with the current time and additional time.
@@ -95,7 +106,7 @@ public interface Action<T> {
      * @param unit the time unit.
      * @return itself
      */
-    default Action<T> deadline(long delay, TimeUnit unit) {
+    default Action<T> deadline(long delay, @Nonnull TimeUnit unit) {
         return deadline(LocalDateTime.now().plusNanos(unit.toNanos(delay)));
     }
 
