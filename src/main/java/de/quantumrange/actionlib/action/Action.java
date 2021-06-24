@@ -1,5 +1,6 @@
 package de.quantumrange.actionlib.action;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
@@ -50,14 +51,25 @@ public interface Action<T> {
     T completion();
 
     /**
-     * just before execution it checks the BooleanSupplier check and if the result is false the action will not be
-     * will not be executed. This is useful if you want to check if you have an internet connection just before
-     * executing the action.
+     * Just before execution it checks the BooleanSupplier check and if the result is false the action will not be
+     * executed. This is useful if you want to check if you have an internet connection just before executing the
+     * action.
      *
      * @param check boolCheck
      * @return itself
      */
     Action<T> setCheck(BooleanSupplier check);
+
+    default Action<T> addCheck(BooleanSupplier check) {
+        BooleanSupplier supplier = getCheck();
+        setCheck((supplier == true || supplier.getAsBoolean()) && check.getAsBoolean());
+    }
+
+    /**
+     * @return check - boolCheck
+     */
+    @Nonnull
+    BooleanSupplier getCheck();
 
     /**
      * Set the Deadline for the Action
