@@ -24,7 +24,7 @@ public interface ActionManager {
 	 */
 	default <T> T completion(@Nonnull Action<T> action) {
 		AtomicReference<Throwable> error = new AtomicReference<>(null);
-		long millis = action.getDeadline().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+		long millis = -action.getDeadline().until(LocalDateTime.now(), ChronoUnit.MILLIS);
 		if (millis < 0) millis = 0;
 		try {
 			Thread.sleep(millis);

@@ -63,7 +63,7 @@ public class MultiThreadManager implements ActionManager {
 
 	@Override
 	public <T> void queue(@Nonnull Action<T> action) {
-		if (action.getDeadline().isAfter(LocalDateTime.now())) service.execute(new ActionThread(action));
+		if (action.getDeadline().isBefore(LocalDateTime.now())) service.execute(new ActionThread(action));
 		else {
 			if (!this.managerThread.isRunning()) new Thread(this.managerThread).start();
 			waitingList.get().add(action);
@@ -82,19 +82,18 @@ public class MultiThreadManager implements ActionManager {
 				} catch (InterruptedException ignored) { }
 
 				List<Action<?>> list = waitingList.get();
-
 				List<Integer> indexToRemove = new ArrayList<>();
 
 				LocalDateTime now = LocalDateTime.now();
 
 				for (int i = 0; i < list.size(); i++) {
-					if (list.get(i).getDeadline().isAfter(now)) {
+					if (list.get(i).getDeadline().isBefore(now)) {
 						indexToRemove.add(i);
 					}
 				}
 
-				indexToRemove.forEach(i -> queue(waitingList.get().get(i)));
-				indexToRemove.forEach(i -> waitingList.get().remove(i));
+				indexToRemove.forEach(i -> service.execute(new ActionThread(list.get(i))));
+				indexToRemove.forEach(i -> waitingList.get().remove((int) i));
 
 				if (waitingList.get().isEmpty()) running = false;
 			}

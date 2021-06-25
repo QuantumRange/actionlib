@@ -35,5 +35,14 @@ ActionManager manager = new MultiThreadManager(.5f); // Uses how much percent of
 #### RateLimitedThreadManager
 The `RateLimitedThreadManager` is useful for requests to the internet where you want to avoid too many requests.
 There is a separate action implementation that should be used for this.
+```java
+ActionManager manager = new RateLimitedThreadManager(); // Use the maximum number of available threads.
+ActionManager manager = new RateLimitedThreadManager(8); // Uses the number of threads specified.
+ActionManager manager = new RateLimitedThreadManager(.5f); // Uses how much percent of the available threads should be used.
 
-# Own Actions
+manager.registerRateLimit(0, 500); // For example, RateID 0 can be a request to Google.com.
+manager.registerRateLimit(1, 1500); // RateID 1 can, for example, send a request to Bing.com.
+
+Action<String> exampleAction = new RateLimitedAction(manager, /* id */0, throwable -> /* Sending Request*/);
+exampleAction.queue();
+```
