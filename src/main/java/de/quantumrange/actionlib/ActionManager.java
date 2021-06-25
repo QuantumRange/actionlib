@@ -1,21 +1,34 @@
 package de.quantumrange.actionlib;
 
+import javax.annotation.Nonnull;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface ActionManager {
 
-	void queue(Action<?> action);
-	<T> T completion(Action<T> action);
+	/**
+	 * Places an action on the queue.
+	 *
+	 * @param action which must be placed on the queue.
+	 * @param <T> can be anything
+	 */
+	<T> void queue(@Nonnull Action<T> action);
 
 	/**
-	 * Stops the current Thread until the Action is processed.
+	 * Calculates the result immediately.
 	 *
-	 * @param action the Action
-	 * @param <T> the Action Type
-	 * @return the result of the calculation of the action.
+	 * @param action  which must be calculate immediately.
+	 * @param <T> can be anything
+	 * @return the finish calculate result.
 	 */
-	default <T> T executeCompletion(Action<T> action) {
+	default <T> T completion(@Nonnull Action<T> action) {
 		AtomicReference<Throwable> error = new AtomicReference<>(null);
+		long millis = action.getDeadline().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+		if (millis < 0) millis = 0;
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException ignored) { }
 		T result = action.submit(null, error::set);
 		Throwable throwable = error.get();
 		if (throwable != null) {

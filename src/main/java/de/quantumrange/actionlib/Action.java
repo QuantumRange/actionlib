@@ -5,6 +5,7 @@ import de.quantumrange.actionlib.impl.manager.ActionThread;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
@@ -87,7 +88,7 @@ public interface Action<T> {
      *
      * @return this current Deadline
      */
-    @Nullable
+    @Nonnull
     LocalDateTime getDeadline();
 
     /**
@@ -108,7 +109,7 @@ public interface Action<T> {
      */
     @Nonnull
     default Action<T> deadline(long delay, @Nonnull TimeUnit unit) {
-        return deadline(LocalDateTime.now().plusNanos(unit.toNanos(delay)));
+        return deadline(LocalDateTime.now().plus(unit.toMillis(delay), ChronoUnit.MILLIS));
     }
 
     /**

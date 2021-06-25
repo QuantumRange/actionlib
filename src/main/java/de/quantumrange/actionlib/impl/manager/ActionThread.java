@@ -6,7 +6,9 @@ public record ActionThread(Action<?> action) implements Runnable {
 
 	@Override
 	public void run() {
-		action.submit(this, throwable -> { });
+		if (action.getCheck() == null || action.getCheck().getAsBoolean()) {
+			action.submit(this, throwable -> { });
+		}
 	}
 
 }

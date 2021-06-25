@@ -13,8 +13,7 @@ import java.util.function.Function;
 
 public class NormalAction<T> implements Action<T> {
 
-	private @Nonnull
-	ActionManager manager;
+	private @Nonnull ActionManager manager;
 	private @Nonnull LocalDateTime deadline;
 	private @Nullable Consumer<T> completion;
 	private @Nullable Consumer<Throwable> failure;
@@ -52,7 +51,7 @@ public class NormalAction<T> implements Action<T> {
 		return this.check;
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
 	public LocalDateTime getDeadline() {
 		return deadline;
