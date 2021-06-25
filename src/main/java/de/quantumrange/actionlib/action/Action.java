@@ -1,5 +1,7 @@
 package de.quantumrange.actionlib.action;
 
+import de.quantumrange.actionlib.action.impl.manager.ActionThread;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
@@ -59,7 +61,7 @@ public interface Action<T> {
      * @param check boolCheck
      * @return itself
      */
-    Action<T> setCheck(@Nonnull BooleanSupplier check);
+    Action<T> setCheck(@Nullable BooleanSupplier check);
 
     /**
      * Adding another Check to the Action.
@@ -82,6 +84,14 @@ public interface Action<T> {
     BooleanSupplier getCheck();
 
     /**
+     * Getter for the current Deadline.
+     *
+     * @return this current Deadline
+     */
+    @Nullable
+    LocalDateTime getDeadline();
+
+    /**
      * Set the Deadline for the Action
      *
      * @param deadline is the time from which the action can be executed.
@@ -91,23 +101,24 @@ public interface Action<T> {
     Action<T> deadline(@Nonnull LocalDateTime deadline);
 
     /**
-     * Map the Result Value to a Different Type.
-     *
-     * @param map the Function that map T to O
-     * @param <O> the new Type
-     * @return itself
-     */
-    <O> Action<O> map(@Nonnull Function<O, T> map);
-
-    /**
      * Set a deadline with the current time and additional time.
      *
      * @param delay the time count.
      * @param unit the time unit.
      * @return itself
      */
+    @Nonnull
     default Action<T> deadline(long delay, @Nonnull TimeUnit unit) {
         return deadline(LocalDateTime.now().plusNanos(unit.toNanos(delay)));
     }
 
+    /**
+     * This executes the code in the ActionManager.
+     *
+     * @param thread This is the action thread where the action is currently running.
+     * @param consumer Throw this Exception if
+     * @return If the action was a completion action, then the calculated value is returned, otherwise null.
+     */
+    @Nullable
+    T submit(@Nullable ActionThread thread, @Nullable Consumer<Throwable> consumer);
 }
