@@ -1,8 +1,8 @@
-package de.quantumrange.actionlib.action.impl.actions;
+package de.quantumrange.actionlib.impl.actions;
 
-import de.quantumrange.actionlib.action.Action;
-import de.quantumrange.actionlib.action.ActionManager;
-import de.quantumrange.actionlib.action.impl.manager.ActionThread;
+import de.quantumrange.actionlib.Action;
+import de.quantumrange.actionlib.ActionManager;
+import de.quantumrange.actionlib.impl.manager.ActionThread;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,7 +13,8 @@ import java.util.function.Function;
 
 public class NormalAction<T> implements Action<T> {
 
-	private @Nonnull ActionManager manager;
+	private @Nonnull
+	ActionManager manager;
 	private @Nonnull LocalDateTime deadline;
 	private @Nullable Consumer<T> completion;
 	private @Nullable Consumer<Throwable> failure;

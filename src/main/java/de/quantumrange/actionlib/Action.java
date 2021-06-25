@@ -1,6 +1,6 @@
-package de.quantumrange.actionlib.action;
+package de.quantumrange.actionlib;
 
-import de.quantumrange.actionlib.action.impl.manager.ActionThread;
+import de.quantumrange.actionlib.impl.manager.ActionThread;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface Action<T> {
 

@@ -1,4 +1,4 @@
-package de.quantumrange.actionlib.action;
+package de.quantumrange.actionlib;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -6,7 +6,6 @@ public interface ActionManager {
 
 	void queue(Action<?> action);
 	<T> T completion(Action<T> action);
-	void clearWaitingActions();
 
 	/**
 	 * Stops the current Thread until the Action is processed.
