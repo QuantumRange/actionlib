@@ -1,0 +1,8 @@
+de\quantumrange\actionlib\Action.class
+de\quantumrange\actionlib\impl\actions\NormalAction.class
+de\quantumrange\actionlib\impl\manager\MultiThreadManager.class
+de\quantumrange\actionlib\ActionManager.class
+de\quantumrange\actionlib\impl\actions\RateLimitedAction.class
+de\quantumrange\actionlib\impl\manager\ActionThread.class
+de\quantumrange\actionlib\impl\manager\MultiThreadManager$MultiThreadManagerThread.class
+de\quantumrange\actionlib\impl\manager\RateLimitedThreadManager.class

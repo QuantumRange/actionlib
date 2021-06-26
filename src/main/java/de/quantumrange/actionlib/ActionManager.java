@@ -29,14 +29,17 @@ public interface ActionManager {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException ignored) { }
-		T result = action.submit(null, error::set);
-		Throwable throwable = error.get();
-		if (throwable != null) {
-			if (throwable instanceof Error) throw (Error) throwable;
-			else throwable.printStackTrace();
-		};
+		if (action.getCheck().getAsBoolean()) {
+			T result = action.submit(null, error::set);
 
-		return result;
+			Throwable throwable = error.get();
+			if (throwable != null) {
+				if (throwable instanceof Error) throw (Error) throwable;
+				else throwable.printStackTrace();
+			};
+
+			return result;
+		} else return null;
 	}
 
 }
