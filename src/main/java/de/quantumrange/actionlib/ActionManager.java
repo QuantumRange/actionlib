@@ -29,7 +29,7 @@ public interface ActionManager {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException ignored) { }
-		if (action.getCheck().getAsBoolean()) {
+		if (action.getCheck() == null || action.getCheck().getAsBoolean()) {
 			T result = action.submit(null, error::set);
 
 			Throwable throwable = error.get();
