@@ -13,17 +13,27 @@ import java.util.function.Function;
 
 public class NormalAction<T> implements Action<T> {
 
-	private @Nonnull ActionManager manager;
-	private @Nonnull LocalDateTime deadline;
-	private @Nullable Consumer<T> completion;
-	private @Nullable Consumer<Throwable> failure;
-	private @Nullable BooleanSupplier check;
-	private final @Nonnull Function<Consumer<Throwable>, T> function;
+	protected @Nonnull ActionManager manager;
+	protected @Nonnull LocalDateTime deadline;
+	protected @Nullable Consumer<T> completion;
+	protected @Nullable Consumer<Throwable> failure;
+	protected @Nullable BooleanSupplier check;
+	protected final @Nonnull Function<Consumer<Throwable>, T> function;
 
 	public NormalAction(@Nonnull ActionManager manager,
 						@Nonnull Function<Consumer<Throwable>, T> function) {
 		this.manager = manager;
 		this.deadline = LocalDateTime.now();
+		this.function = function;
+	}
+
+	protected NormalAction(@Nonnull ActionManager manager, @Nonnull LocalDateTime deadline,
+					   @Nullable Consumer<T> completion, @Nullable Consumer<Throwable> failure, @Nullable BooleanSupplier check, @Nonnull Function<Consumer<Throwable>, T> function) {
+		this.manager = manager;
+		this.deadline = deadline;
+		this.completion = completion;
+		this.failure = failure;
+		this.check = check;
 		this.function = function;
 	}
 
@@ -71,5 +81,10 @@ public class NormalAction<T> implements Action<T> {
 		if (completion != null) completion.accept(result);
 
 		return result;
+	}
+
+	@Override
+	public <O> Action<O> map(Function<T, O> map) {
+		return new NormalAction<>(manager, deadline, null, failure, check, throwable -> map.apply(function.apply(throwable)));
 	}
 }

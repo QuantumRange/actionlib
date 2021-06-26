@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface Action<T> {
 
@@ -122,5 +123,13 @@ public interface Action<T> {
     @Nullable
     T submit(@Nullable ActionThread thread, @Nullable Consumer<Throwable> consumer);
 
+    /**
+     * Maps the result to the requested type O.
+     *
+     * @param map the function maps the finished result to another result.
+     * @param <O> the new type of this action.
+     * @return The new action with the types O.
+     */
+    <O> Action<O> map(Function<T, O> map);
 
 }
