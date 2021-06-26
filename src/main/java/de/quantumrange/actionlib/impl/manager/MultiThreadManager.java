@@ -23,11 +23,12 @@ public class MultiThreadManager implements ActionManager {
 	/**
 	 * Creates a ThreadPool with the specified number of threads.
 	 *
-	 * @param threads number of threads
+	 * @param threads number of threads (As soon as the result is zero or below, 1 is used.)
 	 * @see ExecutorService
 	 * @see Executors#newFixedThreadPool(int)
 	 */
 	public MultiThreadManager(int threads) {
+		threads = Math.max(threads, 1);
 		int availableProcessors = Runtime.getRuntime().availableProcessors();
 		if (threads > availableProcessors) {
 			System.err.printf("""
@@ -44,6 +45,7 @@ public class MultiThreadManager implements ActionManager {
 
 	/**
 	 * Uses only a specified part of the computer threads.
+	 * As soon as the result is zero or below, 1 is used.
 	 *
 	 * @see MultiThreadManager#MultiThreadManager(int)
 	 * @param percent is between 0.0 - 1.0. Where 0.0 is 0% and 1.0 is 100%.
